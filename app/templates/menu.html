@@ -1,34 +1,176 @@
 {% extends "base.html" %} 
 {% block content %}
 <h2>Advance Care Yarning</h2>
-<p>Start New Yarn</p>
+<h3>Helper: {{ helper.name }}</h3>
+<div class="btn-group-vertical">
+    <button type="button" class="btn btn-primary padded-btn" data-toggle="modal" data-target="#newYarn">Start a new Yarn</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loadYarn">Continue a Yarn</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#profileModal">Update my details</button>
+</div>
 
-<form action="" method="POST" name="form">
-    <div class="col-md-4 col-md-offset-4">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            <label class="control-label" for="yarner">Name: </label>
-            {{ form.yarner }}
+<!-- Modals -->
+<!-- New Yarn -->
+<div id="newYarn" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
         </div>
-        <div class="form-group">
-            <label class="control-label" for="hibiscus">Hibiscus#: </label>
-            {{ form.hibiscus }}
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
         </div>
-        <button class="btn btn-default" type="submit">Start</button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  
     </div>
-</form>
-<p>Continue Yarn</p>
-<!-- 
-<form action="" method="POST" name="form">
-    <div class="col-md-4 col-md-offset-4">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            <label class="control-label" for="username">Username</label>
-            {{ form.username }}
+</div>
+
+<!-- Continue Yarn -->
+<div id="loadYarn" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
         </div>
-        <button class="btn btn-default" type="submit">Submit</button>
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  
     </div>
-</form>
--->
+</div>
+
+<!-- Links -->
+<div id="links" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  
+    </div>
+</div>
+
+
+    <p>Start New Yarn</p>
+    <form action="" method="POST" name="form">
+        <div class="col-md-4 col-md-offset-4">
+            {{ yarnersform.hidden_tag() }}
+            <div class="form-group">
+                <label class="control-label" for="yarner">Name: </label>
+                {{ yarnersform.yarner }}
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="hibiscus">HBCIS #: </label>
+                {{ yarnersform.hibiscus }}
+            </div>
+            <button class="btn btn-default" type="submit">Start</button>
+        </div>
+    </form>
+
+    <form action="" method="POST" name="form">
+        <div class="col-md-4 col-md-offset-4">
+            {{ profileform.hidden_tag() }}
+            <div class="form-group">
+                <label class="control-label" for="username">Username</label>
+                {{ profileform.username }}
+            </div>
+            <button class="btn btn-default" type="submit">Submit</button>
+        </div>
+    </form>
+
+    <!-- Modals-->
+
+    <!-- New Yarner modal -->
+    
+    <!-- Profile modal -->
+    <div id="profileModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+          
+              <!-- content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Update Profile</h4>
+                  <div id ="profileModalError" class="alert alert-danger" style="display: none;"></div> 
+                </div>
+                <div class="modal-body">
+                    <form id="profileModalForm"action="profile-update" method="POST" name="form">
+                        <input type="hidden" name="ajax" value="True" />
+                        <div class="col-md-4 col-md-offset-4">
+                            {{ profileform.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="control-label" for="username">Username</label>
+                                {{ profileform.username }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="name">Name</label>
+                                {{ profileform.name }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="email">Email</label>
+                                {{ profileform.email }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="password">Password</label>
+                                {{ profileform.password }}
+                            </div>
+                            <button class="btn btn-default" type="submit">Submit</button>
+                        </div>
+                    </form>
+                    <script>
+                        $("#profileModalForm").submit(function(e) {
+    
+                        $.ajax({
+                            type: "POST",
+                            url: 'profile-update',
+                            data: $("#profileModalForm").serialize(), 
+                            success: function()
+                            {
+                                location.reload();
+                            },
+                            error: function(xhr, status, errorv){
+                                var err = eval("(" + xhr.responseText + ")");
+                                var el = document.getElementById("profileModalError");
+                                console.log(el);
+                                el.style.visibility="visible";
+                                el.style.display = 'block';
+                                el.innerHTML = err.message;
+                            }
+                            });
+    
+                        e.preventDefault();
+                    });
+                    </script>
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+          
+            </div>
+        </div>
+        <!-- End modals -->   
+
 </ul>
 {% endblock %}
