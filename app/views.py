@@ -1,6 +1,6 @@
 from app import app, lm
 from flask import request, redirect, render_template, url_for, flash, send_from_directory
-from flask.ext.login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required
 
 from werkzeug.security import generate_password_hash
 from pymongo.errors import DuplicateKeyError
