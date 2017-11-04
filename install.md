@@ -1,5 +1,5 @@
 Create a conda python 2 environment with mongoDb:
-`conda create -n yarnings python=2 mongodb
+`conda create -n yarnings python=2 mongodb`
 
 acitvate conda env: `source activate yarnings`
 
