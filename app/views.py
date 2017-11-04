@@ -80,9 +80,17 @@ def details():
 def send_js(path):
     return send_from_directory('js', path)
 
+@app.route('/plugin/<path:path>')
+def send_plugin(path):
+    return send_from_directory('plugin', path)
+
 @app.route('/css/<path:path>')
 def send_css(path):
     return send_from_directory('css', path)
+
+@app.route('/images/<path:path>')
+def send_image(path):
+    return send_from_directory('images', path)
 
 @app.route('/lib/<path:path>')
 def send_lib(path):
