@@ -18,14 +18,11 @@ class RegisterForm(Form):
 
 class YarnersForm(Form):
     """ Yarners listing form """
-    yarners = SelectField(
-        'Existing Yarns', 
-        choices = []
-    )
+    yarners = SelectField('Existing Yarns')
 
 class NewYarnerForm(Form):
     """ New Yarner form """
-    yarner = StringField('Name', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
     hibiscus = IntegerField('Hibiscus', validators=[DataRequired()])
     ajax = BooleanField('Ajax', validators=[DataRequired()])
 

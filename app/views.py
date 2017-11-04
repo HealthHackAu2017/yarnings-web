@@ -2,13 +2,14 @@ from app import app, lm
 from flask import request, redirect, render_template, url_for, flash, send_from_directory
 from flask_login import login_user, logout_user, login_required, current_user
 from json import dumps as jsonDumps
+from time import time
 
 from .forms import LoginForm, RegisterForm, YarnersForm, ProfileForm, NewYarnerForm
 from .helper import Helper
+from .yarner import Yarner
+from .yarn import YarnForm, Yarn
 
-ajaxOK = jsonDumps({'success':True}), 200, {'ContentType':'application/json'} 
-ajaxFail = jsonDumps({'success':False}), 500, {'ContentType':'application/json'}
-
+#### Ajax return helpers
 def ajaxOK(msg):
     return ajaxMsg(msg, 200)
 
@@ -18,17 +19,42 @@ def ajaxFail(msg):
 def ajaxMsg(msg, status):
     return jsonDumps({'message':msg}), status, {'ContentType':'application/json'}
 
+#### Routes
 @app.route('/')
 def home():
     if current_user.is_authenticated:
         yarnersForm = YarnersForm()
+        yarners = sorted(list(current_user.get_yarners()), key=lambda y: y['name'])
+        print(yarners)
+        yarnersForm.yarners.choices = [(y['_id'], y['name']) for y in yarners]
+
         profileForm = ProfileForm(email=current_user.email, name=current_user.name)
         newYarnersForm = NewYarnerForm()
         helper = current_user
-        return render_template('menu.html', title='Yarnings', yarnersform=yarnersForm, profileform=profileForm, newyarnerform=NewYarnerForm, helper=helper)
+        return render_template('menu.html', title='Yarnings', yarnersform=yarnersForm, profileform=profileForm, newyarnerform=newYarnersForm, helper=helper)
     loginForm = LoginForm()
     registerForm = RegisterForm()
     return render_template('home.html', title='Yarnings', loginform=loginForm, registerform=registerForm)
+
+@app.route('/new-yarner', methods=['POST'])
+@login_required
+def new_yarner():
+    form = NewYarnerForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        hibiscus = form.hibiscus.data
+        tYarner = Yarner(name, hibiscus, current_user.get_id())
+
+        if (tYarner.insertDB()):
+            flash("Yarner created successfully", category='success')
+            current_user.set_yarner(tYarner.get_hibiscus())
+
+            if (form.ajax.data == "True"):
+                return ajaxOK("Yarner Created Successfully!");
+            return redirect(url_for("new_yarn"))
+        return ajaxFail("HBCIS already registered")
+    #flash("Bad input. Please check fields.", category='error')
+    return ajaxFail("Failed to validate fields. Please check input.")
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -80,11 +106,6 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route('/yarn', methods=['GET'])
-@login_required
-def yarn():
-    return render_template('example.html')
-
 @app.route('/profile-update', methods=['POST'])
 @login_required
 def profile_update():
@@ -106,6 +127,40 @@ def profile_update():
     #flash("Bad input. Please check fields.", category='error')
     return ajaxFail("Failed to validate fields. Please check input.")
 
+#### TO IMPLEMENT
+@app.route('/new-yarn', methods=['GET'])
+@login_required
+def new_yarn():
+    if current_user.get_yarner() == None:
+        return redirect(url_for("home"))
+    if current_user.get_yarn() == None:
+        current_user.set_yarn == int(time())
+    tYarner = app.config['YARNERS_COLLECTION'].find_one({"_id": current_user.get_yarner()})
+    tYarn = Yarn(tYarner['name'], current_user.get_yarner(), current_user.get_yarn(), current_user.get_id())
+    if tYarn.insertDB():        
+        return redirect(url_for("yarn"))
+    flash("Unable to start a new yarn", category='error')
+    return render_template('menu.html')
+
+@app.route('/continue-yarn',  methods=['GET'])
+@login_required
+def continue_yarn():
+    form = YarnerForm()
+    if form.validate_on_submit():
+        yarnerId = form.yarner.data
+        tYarner = app.config['YARNERS_COLLECTION'].find_one({"_id": yarnerId})
+
+@app.route('/yarn', methods=['GET'])
+@login_required
+def yarn():
+    if current_user.get_yarner() == None:
+        return redirect(url_for("home"))
+    form = YarnForm()
+    if current_user.get_yarn() == None:
+        current_user.set_yarn == int(time())
+    tYarn = Yarn.get(current_user.get_yarner(), current_user.get_yarn())
+    return render_template('example.html')
+
 @app.route('/yarn-update', methods=['POST'])
 @login_required
 def yarn_update():
@@ -113,7 +168,7 @@ def yarn_update():
     if form.validate_on_submit():
         yarn
 
-#### static (move to nginx in prod)
+#### Static (move to nginx in prod)
 @app.route('/js/<path:path>')
 def send_js(path):
     return send_from_directory('js', path)
@@ -130,6 +185,7 @@ def send_lib(path):
 def send_plugin(path):
     return send_from_directory('plugin', path)
 
+#### Login Manager helpers
 @lm.user_loader
 def load_user(username):
     u = app.config['HELPERS_COLLECTION'].find_one({"_id": username})

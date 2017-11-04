@@ -3,106 +3,115 @@
 <h2>Advance Care Yarning</h2>
 <h3>Helper: {{ helper.name }}</h3>
 <div class="btn-group-vertical">
-    <button type="button" class="btn btn-primary padded-btn" data-toggle="modal" data-target="#newYarn">Start a new Yarn</button>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loadYarn">Continue a Yarn</button>
+    <button type="button" class="btn btn-primary padded-btn" data-toggle="modal" data-target="#newYarnerModal">Start a new Yarn</button>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#profileModal">Update my details</button>
 </div>
 
-<!-- Modals -->
-<!-- New Yarn -->
-<div id="newYarn" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-  
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
-        </div>
-        <div class="modal-body">
-          <p>Some text in the modal.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-  
-    </div>
-</div>
-
-<!-- Continue Yarn -->
-<div id="loadYarn" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-  
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
-        </div>
-        <div class="modal-body">
-          <p>Some text in the modal.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-  
-    </div>
-</div>
-
-<!-- Links -->
-<div id="links" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-  
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
-        </div>
-        <div class="modal-body">
-          <p>Some text in the modal.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-  
-    </div>
-</div>
-
-
-    <p>Start New Yarn</p>
-    <form action="" method="POST" name="form">
+    <!-- Mod this for Yarners form
+    <form id="YarnerForm" action="continue-yarn" method="POST" name="form">
+        <input type="hidden" name="ajax" value="False" />
         <div class="col-md-4 col-md-offset-4">
-            {{ yarnersform.hidden_tag() }}
+            {{ newyarnerform.hidden_tag() }}
             <div class="form-group">
-                <label class="control-label" for="yarner">Name: </label>
-                {{ yarnersform.yarner }}
+                <label class="control-label" for="name">Name</label>
+                {{ newyarnerform.name }}
             </div>
             <div class="form-group">
-                <label class="control-label" for="hibiscus">HBCIS #: </label>
-                {{ yarnersform.hibiscus }}
-            </div>
-            <button class="btn btn-default" type="submit">Start</button>
-        </div>
-    </form>
-
-    <form action="" method="POST" name="form">
-        <div class="col-md-4 col-md-offset-4">
-            {{ profileform.hidden_tag() }}
-            <div class="form-group">
-                <label class="control-label" for="username">Username</label>
-                {{ profileform.username }}
+                <label class="control-label" for="hibiscus">HBCIS No.</label>
+                {{ newyarnerform.hibiscus }}
             </div>
             <button class="btn btn-default" type="submit">Submit</button>
         </div>
     </form>
+    <script>
+        $("#newYarnerModalForm").submit(function(e) {
+
+        $.ajax({
+            type: "POST",
+            url: 'new-yarner',
+            data: $("#newYarnerModalForm").serialize(), 
+            success: function()
+            {
+                location.reload();
+            },
+            error: function(xhr, status, errorv){
+                var err = eval("(" + xhr.responseText + ")");
+                var el = document.getElementById("newYarnerModalError");
+                console.log(el);
+                el.style.visibility="visible";
+                el.style.display = 'block';
+                el.innerHTML = err.message;
+            }
+            });
+
+        e.preventDefault();
+    });
+    </script>
+    -->
 
     <!-- Modals-->
 
+    <!-- Updater Yarner modal -->
+
     <!-- New Yarner modal -->
+    <div id="newYarnerModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+            
+                <!-- content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">New Yarner</h4>
+                    <div id ="newYarnerModalError" class="alert alert-danger" style="display: none;"></div> 
+                </div>
+                <div class="modal-body">
+                    <form id="newYarnerModalForm"action="new-yarner" method="POST" name="form">
+                        <input type="hidden" name="ajax" value="True" />
+                        <div class="col-md-4 col-md-offset-4">
+                            {{ newyarnerform.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="control-label" for="name">Name</label>
+                                {{ newyarnerform.name }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="hibiscus">HBCIS No.</label>
+                                {{ newyarnerform.hibiscus }}
+                            </div>
+                            <button class="btn btn-default" type="submit">Submit</button>
+                        </div>
+                    </form>
+                    <script>
+                        $("#newYarnerModalForm").submit(function(e) {
+    
+                        $.ajax({
+                            type: "POST",
+                            url: 'new-yarner',
+                            data: $("#newYarnerModalForm").serialize(), 
+                            success: function()
+                            {
+                                //issue with proper on-forwarding of route here
+                                location.reload();
+                            },
+                            error: function(xhr, status, errorv){
+                                var err = eval("(" + xhr.responseText + ")");
+                                var el = document.getElementById("newYarnerModalError");
+                                console.log(el);
+                                el.style.visibility="visible";
+                                el.style.display = 'block';
+                                el.innerHTML = err.message;
+                            }
+                            });
+    
+                        e.preventDefault();
+                    });
+                    </script>
+                </div>
+                <div class="modal-footer">
+                </div>
+                </div>
+            
+            </div>
+        </div>
     
     <!-- Profile modal -->
     <div id="profileModal" class="modal fade" role="dialog">
@@ -170,7 +179,41 @@
           
             </div>
         </div>
-        <!-- End modals -->   
+        <!-- End modals -->
+
+        <!-- Scripts -->
+        <!-- jq extension to filter select forms by input field -->
+        <script>
+        jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
+            return this.each(function() {
+                var select = this;
+                var options = [];
+                $(select).find('option').each(function() {
+                options.push({value: $(this).val(), text: $(this).text()});
+                });
+                $(select).data('options', options);
+                $(textbox).bind('change keyup', function() {
+                var options = $(select).empty().scrollTop(0).data('options');
+                var search = $.trim($(this).val());
+                var regex = new RegExp(search,'gi');
+            
+                $.each(options, function(i) {
+                    var option = options[i];
+                    if(option.text.match(regex) !== null) {
+                    $(select).append(
+                        $('<option>').text(option.text).val(option.value)
+                    );
+                    }
+                });
+                if (selectSingleMatch === true && 
+                    $(select).children().length === 1) {
+                    $(select).children().get(0).selected = true;
+                }
+                });
+            });
+            };
+        </script>
+        <!-- End scripts -->
 
 </ul>
 {% endblock %}

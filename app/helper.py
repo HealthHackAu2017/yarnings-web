@@ -8,7 +8,9 @@ class Helper():
         self.username = username
         self.email = email
         self.name = name
+        self.activeYarner = None
         self.activeYarn = None
+        self.admin = False
 
     def is_authenticated(self):
         return True
@@ -22,12 +24,25 @@ class Helper():
     def get_id(self):
         return self.username
 
+    def get_yarner(self):
+        return self.activeYarner
+
+    def set_yarner(self, hibiscus):
+        self.activeYarner = hibiscus
+
+    def get_yarn(self):
+            return self.activeYarn
+
+    def set_yarn(self, timestamp):
+        self.activeYarn = timestamp
+
     def is_admin(self):
         return self.admin
 
     """ to implement """
-    def get_yarns(self):
-        return None
+    def get_yarners(self):
+        yarners = app.config['YARNERS_COLLECTION'].find({"helper": self.username})
+        return yarners
 
     """ Methods for Helpers """
 
