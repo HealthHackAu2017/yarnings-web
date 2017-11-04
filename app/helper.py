@@ -6,7 +6,7 @@ class Helper():
     def __init__(self, username):
         self.username = username
         self.email = None
-        self.admin = 
+        self.admin = False
 
     def is_authenticated(self):
         return True
