@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash
 from pymongo.errors import DuplicateKeyError
 
 from .forms import LoginForm, RegisterForm, YarnersForm
-from .user import User
+from .helper import Helper
 
 
 @app.route('/')
@@ -31,7 +31,7 @@ def register():
             collection.insert({"_id": user, "password": pass_hash})
             flash("Account created successfully", category='success')
             user = app.config['HELPERS_COLLECTION'].find_one({"_id": form.username.data})
-            user_obj = User(user['_id'])
+            user_obj = Helper(user['_id'])
             login_user(user_obj)
             return redirect(url_for("menu"))
         except DuplicateKeyError:
@@ -44,8 +44,8 @@ def login():
     form = LoginForm()
     if request.method == 'POST' and form.validate_on_submit():
         user = app.config['HELPERS_COLLECTION'].find_one({"_id": form.username.data})
-        if user and User.validate_login(user['password'], app.config['SALT'] + form.password.data):
-            user_obj = User(user['_id'])
+        if user and Helper.validate_login(user['password'], app.config['SALT'] + form.password.data):
+            user_obj = Helper(user['_id'])
             login_user(user_obj)
             flash("Logged in successfully!", category='success')
             return redirect(request.args.get("next") or url_for("menu"))
@@ -93,4 +93,4 @@ def load_user(username):
     u = app.config['HELPERS_COLLECTION'].find_one({"_id": username})
     if not u:
         return None
-    return User(u['_id'])
+    return Helper(u['_id'])
