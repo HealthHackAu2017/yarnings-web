@@ -3,6 +3,32 @@
 <h2>Advance Care Yarning</h2>
 <p>Start New Yarn</p>
 
-
+<form action="" method="POST" name="form">
+    <div class="col-md-4 col-md-offset-4">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label class="control-label" for="yarner">Name: </label>
+            {{ form.yarner }}
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="hibiscus">Hibiscus#: </label>
+            {{ form.hibiscus }}
+        </div>
+        <button class="btn btn-default" type="submit">Start</button>
+    </div>
+</form>
+<p>Continue Yarn</p>
+<!-- 
+<form action="" method="POST" name="form">
+    <div class="col-md-4 col-md-offset-4">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label class="control-label" for="username">Username</label>
+            {{ form.username }}
+        </div>
+        <button class="btn btn-default" type="submit">Submit</button>
+    </div>
+</form>
+-->
 </ul>
 {% endblock %}

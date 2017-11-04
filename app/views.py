@@ -5,7 +5,7 @@ from flask.ext.login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash
 from pymongo.errors import DuplicateKeyError
 
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, YarnersForm
 from .user import User
 
 
@@ -21,7 +21,8 @@ def register():
         # Ask for data to store
         user = form.username.data
         password = form.password.data
-        pass_hash = generate_password_hash(password, method='pbkdf2:sha256')
+        pass_salt = app.config['SALT'] + password
+        pass_hash = generate_password_hash(pass_salt, method='pbkdf2:sha256')
 
         collection = app.config['HELPERS_COLLECTION']
 
@@ -29,9 +30,12 @@ def register():
         try:
             collection.insert({"_id": user, "password": pass_hash})
             flash("Account created successfully", category='success')
+            user = app.config['HELPERS_COLLECTION'].find_one({"_id": form.username.data})
+            user_obj = User(user['_id'])
+            login_user(user_obj)
             return redirect(url_for("menu"))
         except DuplicateKeyError:
-            flash("User ", category='error')
+            flash("Yarn already started", category='error')
     return render_template('register.html', title='register', form=form)
         
 
@@ -40,7 +44,7 @@ def login():
     form = LoginForm()
     if request.method == 'POST' and form.validate_on_submit():
         user = app.config['HELPERS_COLLECTION'].find_one({"_id": form.username.data})
-        if user and User.validate_login(user['password'], form.password.data):
+        if user and User.validate_login(user['password'], app.config['SALT'] + form.password.data):
             user_obj = User(user['_id'])
             login_user(user_obj)
             flash("Logged in successfully!", category='success')
@@ -51,7 +55,8 @@ def login():
 @app.route('/menu')
 @login_required
 def menu():
-    return render_template('menu.html')
+    form = YarnersForm()
+    return render_template('menu.html', title='Yarnings', form=form)
 
 @app.route('/logout')
 def logout():
