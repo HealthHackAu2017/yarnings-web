@@ -6,7 +6,7 @@ class User():
     def __init__(self, username):
         self.username = username
         self.email = None
-        self.admin = False
+        self.admin = 
 
     def is_authenticated(self):
         return True
@@ -26,9 +26,6 @@ class User():
     # to implement
     def get_yarns(self):
         return None
-
-    
-        
 
     @staticmethod
     def validate_login(password_hash, password):

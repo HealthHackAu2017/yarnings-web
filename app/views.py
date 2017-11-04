@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash
 from pymongo.errors import DuplicateKeyError
 
 from .forms import LoginForm, RegisterForm
-from .user import User, RegisterUser
+from .user import User
 
 
 @app.route('/')
@@ -16,12 +16,14 @@ def home():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm
+    form = RegisterForm()
     if request.method == 'POST' and form.validate_on_submit():
         # Ask for data to store
         user = form.username.data
         password = form.password.data
         pass_hash = generate_password_hash(password, method='pbkdf2:sha256')
+
+        collection = app.config['HELPERS_COLLECTION']
 
         # Insert the user in the DB
         try:
@@ -30,13 +32,14 @@ def register():
             return redirect(url_for("menu"))
         except DuplicateKeyError:
             flash("User ", category='error')
+    return render_template('register.html', title='register', form=form)
         
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if request.method == 'POST' and form.validate_on_submit():
-        user = app.config['USERS_COLLECTION'].find_one({"_id": form.username.data})
+        user = app.config['HELPERS_COLLECTION'].find_one({"_id": form.username.data})
         if user and User.validate_login(user['password'], form.password.data):
             user_obj = User(user['_id'])
             login_user(user_obj)
@@ -82,7 +85,7 @@ def send_lib(path):
 
 @lm.user_loader
 def load_user(username):
-    u = app.config['USERS_COLLECTION'].find_one({"_id": username})
+    u = app.config['HELPERS_COLLECTION'].find_one({"_id": username})
     if not u:
         return None
     return User(u['_id'])
