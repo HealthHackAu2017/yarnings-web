@@ -128,13 +128,19 @@ def profile_update():
     #flash("Bad input. Please check fields.", category='error')
     return ajaxFail("Failed to validate fields. Please check input.")
 
-@app.route('/continue-yarn',  methods=['GET'])
+@app.route('/continue-yarn',  methods=['POST'])
 @login_required
 def continue_yarn():
-    form = YarnerForm()
-    if form.validate_on_submit():
-        yarnerId = form.yarner.data
-        tYarner = app.config['YARNERS_COLLECTION'].find_one({"_id": yarnerId})
+    form = YarnersForm()
+    yarnerId = form.yarners.data
+    print ('yId:' + yarnerId)
+    mYarner = app.config['YARNERS_COLLECTION'].find_one({"_id": yarnerId})
+    print(mYarner)
+    tYarner = Yarner(mYarner['name'], mYarner['_id'], mYarner['helper'])
+    tYarn = tYarner.get_last_yarn()
+    current_user.set_yarner(tYarner.get_hibiscus())
+    current_user.set_yarn(tYarn['timestamp'])
+    return redirect(url_for('yarn'))        
 
 @app.route('/yarn', methods=['GET'])
 @login_required

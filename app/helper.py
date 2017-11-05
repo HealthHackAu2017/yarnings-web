@@ -41,7 +41,6 @@ class Helper():
     def is_admin(self):
         return self.admin
 
-    """ to implement """
     def get_yarners(self):
         yarners = app.config['YARNERS_COLLECTION'].find({"helper": self.username})
         return yarners

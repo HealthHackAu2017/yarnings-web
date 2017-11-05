@@ -36,9 +36,9 @@ class Yarn():
     def __init__(self, name, yarner, timestamp, helper, yarn = defaultYarn):
         self._id = str(yarner) + "_" + str(timestamp)
         self.name = name
-        self.yarner = yarner
+        self.yarner = str(yarner)
         self.helper = helper
-        self.timestamp = timestamp
+        self.timestamp = str(timestamp)
         self.yarn = yarn
 
     def get_name(self):

@@ -5,7 +5,7 @@ class Yarner():
 
     def __init__(self, name, hibiscus, helper):
         self.name = name
-        self.hibiscus = hibiscus
+        self.hibiscus = str(hibiscus)
         self.helper = helper
 
     def get_hibiscus(self):
@@ -18,6 +18,14 @@ class Yarner():
         return self.helper
 
     """ Methods for Yarners """
+
+    def get_yarns(self):
+        yarns = app.config['YARNS_COLLECTION'].find({"yarner": self.hibiscus})
+        return yarns
+
+    def get_last_yarn(self):
+        yarns = app.config['YARNS_COLLECTION'].find({"yarner": self.hibiscus})
+        return list(yarns)[-1]
 
     def insertDB(self):
         collection = app.config['YARNERS_COLLECTION']
