@@ -6,21 +6,22 @@
 
     <form id="YarnerForm" action="continue-yarn" method="POST" name="form">
         <input type="hidden" name="ajax" value="False" />
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-4 col-md-offset-4 text-center">
             {{ yarnersform.hidden_tag() }}
             <div class="form-group">
+                <p>Find Yarns</p>
                 <input id="yarnersFilter" type="text" />
             </div>
             <div class="form-group">
-                {{ yarnersform.yarners(size=10) }}
+                {{ yarnersform.yarners(size=6, id="yarnersSelect") }}
             </div>
             <div class="btn-group-vertical">
-                    <button class="btn btn-default" type="submit">Continue Yarn</button>
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newYarnerModal">Start a new Yarn</button>
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#profileModal">Update my details</button>
+                    <button id="yarnersSubmit" class="btn btn-default btn-yarn" type="submit">Continue Yarn</button>
+                    <button type="button" class="btn btn-default btn-yarn" data-toggle="modal" data-target="#newYarnerModal">Start a new Yarn</button>
+                    <button type="button" class="btn btn-default btn-yarn" data-toggle="modal" data-target="#profileModal">Update my details</button>
                 </div>
             <script>
-                $(function() {$('#yarners').filterByText($('#yarnersFilter'), true);}); 
+                $(function() {$('#yarnersSelect').filterByText($('#yarnersFilter'), true);}); 
             </script>
         </div>
     </form>
@@ -40,7 +41,7 @@
                     <h4 class="modal-title">New Yarner</h4>
                     <div id ="newYarnerModalError" class="alert alert-danger" style="display: none;"></div> 
                 </div>
-                <div class="modal-body">
+                <div class="modal-body text-center no-padding-modal">
                     <form id="newYarnerModalForm"action="new-yarner" method="POST" name="form">
                         <input type="hidden" name="ajax" value="True" />
                         <div class="col-md-4 col-md-offset-4">
@@ -76,7 +77,7 @@
                   <h4 class="modal-title">Update Profile</h4>
                   <div id ="profileModalError" class="alert alert-danger" style="display: none;"></div> 
                 </div>
-                <div class="modal-body">
+                <div class="modal-body text-center no-padding-modal">
                     <form id="profileModalForm"action="profile-update" method="POST" name="form">
                         <input type="hidden" name="ajax" value="True" />
                         <div class="col-md-4 col-md-offset-4">
@@ -164,6 +165,21 @@
                 });
             });
             };
+        </script>
+
+        <!-- Disable Yarners continue button until one is selected -->
+        <script>
+            $(function() {
+                $("#yarnersSubmit").prop('disabled', true);
+
+                $("#yarnersSelect").bind("change", function() { 
+                    if ($("#yarnersSelect").val().length > 0) {
+                        $("#yarnersSubmit").prop('disabled', '');
+                    } else {
+                        $("#yarnersSubmit").prop('disabled', true);
+                    }
+                });
+            });
         </script>
         <!-- End scripts -->
 
