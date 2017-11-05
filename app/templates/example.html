@@ -34,7 +34,7 @@
         @import "https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css";
         @import "https://daneden.github.io/animate.css/animate.min.css";
 
-        div[class^="speech-box-"], div[class*=" speech-box-"]  {
+        div[class^="speech-box-"], div[class*=" speech-box-"] {
             z-index: 1000;
             background: #f1f1f1;
             border: 1px solid black;
@@ -45,6 +45,10 @@
             width: 60%;
             padding: 15px;
             color: #6d6d6d;
+        }
+
+        .nav-tabs > li, .nav-tabs > li > a {
+            color: #555;
         }
 
         .animate {
@@ -133,11 +137,11 @@
         }
 
         #wrapper.toggled {
-            padding-left: 220px;
+            padding-left: 300px;
         }
 
         #wrapper.toggled #sidebar-wrapper {
-            width: 220px;
+            width: 300px;
         }
 
         #wrapper.toggled #page-content-wrapper {
@@ -151,8 +155,8 @@
             -webkit-transition: all 0.5s ease;
             background: #1a1a1a;
             height: 100%;
-            left: 220px;
-            margin-left: -220px;
+            left: 300px;
+            margin-left: -300px;
             overflow-x: hidden;
             overflow-y: auto;
             transition: all 0.5s ease;
@@ -207,35 +211,35 @@
         }
 
         .sidebar-nav li:nth-child(2):before {
-            background-color: #402d5c;
+            background-color: #999;
         }
 
         .sidebar-nav li:nth-child(3):before {
-            background-color: #4c366d;
+            background-color: #999;
         }
 
         .sidebar-nav li:nth-child(4):before {
-            background-color: #583e7e;
+            background-color: #999;
         }
 
         .sidebar-nav li:nth-child(5):before {
-            background-color: #64468f;
+            background-color: #999;
         }
 
         .sidebar-nav li:nth-child(6):before {
-            background-color: #704fa0;
+            background-color: #999;
         }
 
         .sidebar-nav li:nth-child(7):before {
-            background-color: #7c5aae;
+            background-color: #999;
         }
 
         .sidebar-nav li:nth-child(8):before {
-            background-color: #8a6cb6;
+            background-color: #999;
         }
 
         .sidebar-nav li:nth-child(9):before {
-            background-color: #987dbf;
+            background-color: #999;
         }
 
         .sidebar-nav li:hover:before {
@@ -471,25 +475,25 @@
                 </a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-home"></i>Home</a>
+                <a href="#"><i class="fa fa-fw fa-youtube"></i> Chris’ Story</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-folder"></i> Page one</a>
+                <a href="#"><i class="fa fa-fw fa-file-o"></i> Statement of choices (SOC)</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-file-o"></i> Second page</a>
+                <a href="#"><i class="fa fa-fw fa-file-o"></i> Acute Resuscitation Plan (ARP)</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-cog"></i> Third page</a>
+                <a href="#"><i class="fa fa-fw fa-file-o"></i> Advanced Health Directive (AHD)</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-bank"></i> Page four</a>
+                <a href="#"><i class="fa fa-fw fa-file-o"></i> Enduring Power of Attorney (EPOA)</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-dropbox"></i></a>
+                <a href="#"><i class="fa fa-fw fa-link"></i> Legal services</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-twitter"></i>Logout</a>
+                <a href="/">Exit</a>
             </li>
         </ul>
     </nav>
@@ -523,8 +527,12 @@
         var slideConut = $('.screen').length;
         var slides = [];
         var current = 0;
+        var bg = new Audio('../audio/bg.mp3');
+        var fish = new Audio('../audio/splash.mp3');
+        var newday = new Audio('../audio/newday.mp3');
 
         $(document).ready(function () {
+            bg.play();
             var trigger = $('.hamburger'),
                 overlay = $('.overlay'),
                 isClosed = false;
@@ -558,6 +566,12 @@
                 'trim': true, // Trim the string to type (Default: false, does not trim)
                 'callback': null // if exists, called after all effects have finished
             });
+
+            $('.save-choices').click(function (e) {
+                var choices = {};
+
+                
+            });
         });
 
 
@@ -573,7 +587,16 @@
         function nextSlide() {
             $(slides[current]).hide();
             $(slides[++current]).show();
-            var selector = '.speech-box-'+(current+1);
+            var selector = '.speech-box-' + (current + 1);
+
+            if (current == 4) {
+                fish.play();
+            }
+
+            if (current == 6) {
+                newday.play();
+            }
+
             $(selector).typewrite({
                 'delay': 100, //time in ms between each letter
                 'extra_char': '', //"cursor" character to append after each display

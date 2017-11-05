@@ -177,6 +177,14 @@ def send_js(path):
 def send_css(path):
     return send_from_directory('css', path)
 
+@app.route('/images/<path:path>')
+def send_images(path):
+    return send_from_directory('images', path)
+
+@app.route('/audio/<path:path>')
+def send_audio(path):
+    return send_from_directory('audio', path)
+
 @app.route('/lib/<path:path>')
 def send_lib(path):
     return send_from_directory('lib', path)
