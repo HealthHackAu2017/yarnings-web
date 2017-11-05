@@ -1,8 +1,15 @@
 from app import app
 from flask_wtf import FlaskForm as Form
-from wtforms import StringField, BooleanField
+from wtforms import StringField, BooleanField, RadioField, SelectMultipleField, widgets
 from wtforms.validators import Optional, DataRequired
 from pymongo.errors import DuplicateKeyError
+
+class MultiCheckboxField(SelectMultipleField):
+    """
+    Hack to get checkbox for the selectmultifield wtform
+    """
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 class Yarn():
     
@@ -95,4 +102,18 @@ class Yarn():
 class YarnForm(Form):
     """Yarn form to hold and share a yarning"""
     preferred_name = StringField('Name', validators=[Optional()])
-    ajax = BooleanField('Ajax', validators=[DataRequired()])
+    #ajax = BooleanField('Ajax', validators=[DataRequired()])
+    f1 = StringField('F1', validators=[Optional()])
+    f2 = StringField('F2', validators=[Optional()])
+    h1 = RadioField('Label', choices=[('1','I do not want to know about it'),('2','I somewhat want to know'),('3','I do want to know')])
+    h2 = StringField('H2', validators=[Optional()])
+    h3 = MultiCheckboxField('Places', choices=[('1','At Home'),('2','Hospital'),('3',"Family members' house"),('4',''),('5','Somewhere else (please specify below)')])
+    h4 = StringField('H4', validators=[Optional()])
+    w1 = RadioField('Will', choices=[('1','Yes'),('2','No')])
+    wARP = RadioField('ARP', choices=[('1','Yes'),('2','No'),('3','Unsure')])
+    wSOC = RadioField('SOC', choices=[('1','Yes'),('2','No'),('3','Unsure')])
+    wAHD = RadioField('AHD', choices=[('1','Yes'),('2','No'),('3','Unsure')])
+    wEPOA = RadioField('EPOA', choices=[('1','Yes'),('2','No'),('3','Unsure')])
+    w3 = StringField('W3', validators=[Optional()])
+    w4 = RadioField('Donate Organs', choices=[('1','Yes'),('2','No'),('3','Unsure')])
+    w5 = RadioField('Health Record', choices=[('1','Yes'),('2','No'),('3','Unsure')])
