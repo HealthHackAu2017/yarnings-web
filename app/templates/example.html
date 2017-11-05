@@ -475,7 +475,7 @@
                 </a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-youtube"></i> Chris’ Story</a>
+                <a href="#" data-toggle="modal" data-target="#vidModal"><i class="fa fa-fw fa-youtube"></i> Chris’ Story</a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-fw fa-file-o"></i> Statement of choices (SOC)</a>
@@ -518,6 +518,8 @@
             </div>
 
             {% include "modals/family-member.html" %}
+            {% include "modals/video.html" %}
+            {% include "modals/review.html" %}
 
             <script src="lib/js/head.min.js"></script>
         </div>
@@ -596,6 +598,7 @@
                 choices.wishes.donate_organs = $('input[name=wishes-organs]:checked').val();
                 choices.wishes.myhealth = $('input[name=wishes-myhealth]:checked').val();
 
+                window.choices = choices;
                 console.log(choices);
                 $.ajax({
                     type: "POST",
@@ -632,7 +635,25 @@
                 'delay': 100, //time in ms between each letter
                 'extra_char': '', //"cursor" character to append after each display
                 'trim': true, // Trim the string to type (Default: false, does not trim)
-                'callback': null // if exists, called after all effects have finished
+                'callback': function () {
+                    if (current == 5)
+                    {
+                        $("#summaryModal").modal('show');
+
+                        var choices = window.choices;
+
+                        for (var section in choices)
+                        {
+                            for (var choice in choices[section])
+                            {
+                                var selector = '#choices-'+section+'-'+choice;
+                                console.log(selector);
+                                console.log(choices[section][choice]);
+                                $(selector).html(choices[section][choice]);
+                            }
+                        }
+                    }
+                } // if exists, called after all effects have finished
             });
         }
 
