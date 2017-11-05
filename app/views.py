@@ -165,8 +165,9 @@ def yarn():
 @login_required
 def yarn_update():
     form = YarnForm()
-    if form.validate_on_submit():
-        yarn
+    return ajaxOK("Yarn received")
+    #if form.validate_on_submit():
+
 
 #### Static (move to nginx in prod)
 @app.route('/js/<path:path>')
