@@ -10,58 +10,490 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/sandstone/bootstrap.min.css" rel="stylesheet">
     <link href="css/yarnings.css" rel="stylesheet">
-    <style type="text/css">
-        body {
-            padding-top: 70px
-        }
-    </style>
-    <style type="text/css">
-        ul.nav li a,
-        ul.nav li a:visited {
-            color: #7BEF00 !important;
-        }
-        
-        ul.nav li a:hover,
-        ul.nav li a:active {
-            color: #55A500 !important;
-        }
-        
-        ul.nav li.active a {
-            color: #7BEF00 !important;
-        }
-    </style>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+            <style>
+                    @import "https://designmodo.github.io/Flat-UI/dist/css/flat-ui.min.css";
+                    @import "https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css";
+                    @import "https://daneden.github.io/animate.css/animate.min.css";
+            
+                    div[class^="speech-box-"], div[class*=" speech-box-"]  {
+                        z-index: 1000;
+                        background: #f1f1f1;
+                        border: 1px solid black;
+                        border-width: medium;
+                        position: fixed;;
+                        bottom: 100px;
+                        left: 20%;
+                        width: 60%;
+                        padding: 15px;
+                        color: #6d6d6d;
+                    }
+            
+                    .animate {
+                        position: fixed;
+                        bottom: 38px;
+                        right: -51px;
+                        width: 110%;
+                        height: 110%;
+                    }
+            
+                    .btn-round {
+                        background-color: #d23f31;
+                        border-radius: 999em;
+                        width: 56px;
+                        height: 56px;
+                        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+                        line-height: 1;
+                        font-size: 36px;
+                        position: relative;
+                        cursor: pointer;
+                        display: inline-block;
+                    }
+            
+                    .btn-round span {
+                        position: absolute;
+                        left: 0;
+                        top: 50%;
+                        height: 100%;
+                        width: 100%;
+                        text-align: center;
+                        margin-top: -19px;
+                        color: #FFF;
+                    }
+            
+                    .green {
+                        background-color: #57A429;
+                    }
+            
+                    .blue {
+                        background-color: #38818F;
+                    }
+            
+                    .orange {
+                        background-color: #D28031;
+                    }
+            
+           
+                    /*-------------------------------*/
+                    /*           VARIABLES           */
+                    /*-------------------------------*/
+                    body {
+                        position: relative;
+                        overflow-x: hidden;
+                    }
+            
+                    body,
+                    html {
+                        height: 100%;
+                        background-color: #f4f4f4;
+                    }
+            
+                    .nav .open > a {
+                        background-color: transparent;
+                    }
+            
+                    .nav .open > a:hover {
+                        background-color: transparent;
+                    }
+            
+                    .nav .open > a:focus {
+                        background-color: transparent;
+                    }
+            
+                    /*-------------------------------*/
+                    /*           Wrappers            */
+                    /*-------------------------------*/
+                    #wrapper {
+                        -moz-transition: all 0.5s ease;
+                        -o-transition: all 0.5s ease;
+                        -webkit-transition: all 0.5s ease;
+                        padding-left: 0;
+                        transition: all 0.5s ease;
+                    }
+            
+                    #wrapper.toggled {
+                        padding-left: 220px;
+                    }
+            
+                    #wrapper.toggled #sidebar-wrapper {
+                        width: 220px;
+                    }
+            
+                    #wrapper.toggled #page-content-wrapper {
+                        margin-right: -220px;
+                        position: absolute;
+                    }
+            
+                    #sidebar-wrapper {
+                        -moz-transition: all 0.5s ease;
+                        -o-transition: all 0.5s ease;
+                        -webkit-transition: all 0.5s ease;
+                        background: #1a1a1a;
+                        height: 100%;
+                        left: 220px;
+                        margin-left: -220px;
+                        overflow-x: hidden;
+                        overflow-y: auto;
+                        transition: all 0.5s ease;
+                        width: 0;
+                        z-index: 1000;
+                    }
+            
+                    #sidebar-wrapper::-webkit-scrollbar {
+                        display: none;
+                    }
+            
+                    #page-content-wrapper {
+                        padding-top: 70px;
+                        width: 100%;
+                    }
+            
+                    /*-------------------------------*/
+                    /*     Sidebar nav styles        */
+                    /*-------------------------------*/
+                    .sidebar-nav {
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+                        position: absolute;
+                        top: 0;
+                        width: 220px;
+                    }
+            
+                    .sidebar-nav li {
+                        display: inline-block;
+                        line-height: 20px;
+                        position: relative;
+                        width: 100%;
+                    }
+            
+                    .sidebar-nav li:before {
+                        background-color: #1c1c1c;
+                        content: '';
+                        height: 100%;
+                        left: 0;
+                        position: absolute;
+                        top: 0;
+                        -webkit-transition: width 0.2s ease-in;
+                        transition: width 0.2s ease-in;
+                        width: 3px;
+                        z-index: -1;
+                    }
+            
+                    .sidebar-nav li:first-child a {
+                        background-color: #1a1a1a;
+                        color: #ffffff;
+                    }
+            
+                    .sidebar-nav li:nth-child(2):before {
+                        background-color: #402d5c;
+                    }
+            
+                    .sidebar-nav li:nth-child(3):before {
+                        background-color: #4c366d;
+                    }
+            
+                    .sidebar-nav li:nth-child(4):before {
+                        background-color: #583e7e;
+                    }
+            
+                    .sidebar-nav li:nth-child(5):before {
+                        background-color: #64468f;
+                    }
+            
+                    .sidebar-nav li:nth-child(6):before {
+                        background-color: #704fa0;
+                    }
+            
+                    .sidebar-nav li:nth-child(7):before {
+                        background-color: #7c5aae;
+                    }
+            
+                    .sidebar-nav li:nth-child(8):before {
+                        background-color: #8a6cb6;
+                    }
+            
+                    .sidebar-nav li:nth-child(9):before {
+                        background-color: #987dbf;
+                    }
+            
+                    .sidebar-nav li:hover:before {
+                        -webkit-transition: width 0.2s ease-in;
+                        transition: width 0.2s ease-in;
+                        width: 100%;
+                    }
+            
+                    .sidebar-nav li a {
+                        color: #dddddd;
+                        display: block;
+                        padding: 10px 15px 10px 30px;
+                        text-decoration: none;
+                    }
+            
+                    .sidebar-nav li.open:hover before {
+                        -webkit-transition: width 0.2s ease-in;
+                        transition: width 0.2s ease-in;
+                        width: 100%;
+                    }
+            
+                    .sidebar-nav .dropdown-menu {
+                        background-color: #222222;
+                        border-radius: 0;
+                        border: none;
+                        box-shadow: none;
+                        margin: 0;
+                        padding: 0;
+                        position: relative;
+                        width: 100%;
+                    }
+            
+                    .sidebar-nav li a:hover,
+                    .sidebar-nav li a:active,
+                    .sidebar-nav li a:focus,
+                    .sidebar-nav li.open a:hover,
+                    .sidebar-nav li.open a:active,
+                    .sidebar-nav li.open a:focus {
+                        background-color: transparent;
+                        color: #ffffff;
+                        text-decoration: none;
+                    }
+            
+                    .sidebar-nav > .sidebar-brand {
+                        font-size: 20px;
+                        height: 65px;
+                        line-height: 44px;
+                    }
+            
+                    /*-------------------------------*/
+                    /*       Hamburger-Cross         */
+                    /*-------------------------------*/
+                    .hamburger {
+                        background: transparent;
+                        border: none;
+                        display: block;
+                        height: 32px;
+                        margin-left: 15px;
+                        position: fixed;
+                        top: 20px;
+                        width: 32px;
+                        z-index: 999;
+                    }
+            
+                    .hamburger:hover {
+                        outline: none;
+                    }
+            
+                    .hamburger:focus {
+                        outline: none;
+                    }
+            
+                    .hamburger:active {
+                        outline: none;
+                    }
+            
+                    .hamburger.is-closed:before {
+                        -webkit-transform: translate3d(0, 0, 0);
+                        -webkit-transition: all 0.35s ease-in-out;
+                        color: #ffffff;
+                        content: '';
+                        display: block;
+                        font-size: 14px;
+                        line-height: 32px;
+                        opacity: 0;
+                        text-align: center;
+                        width: 100px;
+                    }
+            
+                    .hamburger.is-closed:hover before {
+                        -webkit-transform: translate3d(-100px, 0, 0);
+                        -webkit-transition: all 0.35s ease-in-out;
+                        display: block;
+                        opacity: 1;
+                    }
+            
+                    .hamburger.is-closed:hover .hamb-top {
+                        -webkit-transition: all 0.35s ease-in-out;
+                        top: 0;
+                    }
+            
+                    .hamburger.is-closed:hover .hamb-bottom {
+                        -webkit-transition: all 0.35s ease-in-out;
+                        bottom: 0;
+                    }
+            
+                    .hamburger.is-closed .hamb-top {
+                        -webkit-transition: all 0.35s ease-in-out;
+                        background-color: rgba(255, 255, 255, 0.7);
+                        top: 5px;
+                    }
+            
+                    .hamburger.is-closed .hamb-middle {
+                        background-color: rgba(255, 255, 255, 0.7);
+                        margin-top: -2px;
+                        top: 50%;
+                    }
+            
+                    .hamburger.is-closed .hamb-bottom {
+                        -webkit-transition: all 0.35s ease-in-out;
+                        background-color: rgba(255, 255, 255, 0.7);
+                        bottom: 5px;
+                    }
+            
+                    .hamburger.is-closed .hamb-top,
+                    .hamburger.is-closed .hamb-middle,
+                    .hamburger.is-closed .hamb-bottom,
+                    .hamburger.is-open .hamb-top,
+                    .hamburger.is-open .hamb-middle,
+                    .hamburger.is-open .hamb-bottom {
+                        height: 4px;
+                        left: 0;
+                        position: absolute;
+                        width: 100%;
+                    }
+            
+                    .hamburger.is-open .hamb-top {
+                        -webkit-transform: rotate(45deg);
+                        -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.73, 1, 0.28, 0.08);
+                        background-color: #fff;
+                        margin-top: -2px;
+                        top: 50%;
+                    }
+            
+                    .hamburger.is-open .hamb-middle {
+                        background-color: #fff;
+                        display: none;
+                    }
+            
+                    .hamburger.is-open .hamb-bottom {
+                        -webkit-transform: rotate(-45deg);
+                        -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.73, 1, 0.28, 0.08);
+                        background-color: #fff;
+                        margin-top: -2px;
+                        top: 50%;
+                    }
+            
+                    .hamburger.is-open:before {
+                        -webkit-transform: translate3d(0, 0, 0);
+                        -webkit-transition: all 0.35s ease-in-out;
+                        color: #ffffff;
+                        content: '';
+                        display: block;
+                        font-size: 14px;
+                        line-height: 32px;
+                        opacity: 0;
+                        text-align: center;
+                        width: 100px;
+                    }
+            
+                    .hamburger.is-open:hover before {
+                        -webkit-transform: translate3d(-100px, 0, 0);
+                        -webkit-transition: all 0.35s ease-in-out;
+                        display: block;
+                        opacity: 1;
+                    }
+            
+                    /*-------------------------------*/
+                    /*          Dark Overlay         */
+                    /*-------------------------------*/
+                    .overlay {
+                        position: fixed;
+                        display: none;
+                        width: 100%;
+                        height: 100%;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background-color: rgba(0, 0, 0, 0.4);
+                        z-index: 1;
+                    }
+            
+                    /* SOME DEMO STYLES - NOT REQUIRED */
+                    body,
+                    html {
+                        background-color: #f4f4f4;
+                    }
+            
+                    body h1,
+                    body h2,
+                    body h3,
+                    body h4 {
+                        color: rgba(231, 102, 44, 0.9);
+                    }
+            
+                    body p,
+                    body blockquote {
+                        color: rgba(231, 102, 44, 0.7);
+                    }
+            
+                    body a {
+                        color: rgba(231, 102, 44, 0.8);
+                        text-decoration: underline;
+                    }
+            
+                    body a:hover {
+                        color: #fff;
+                    }
+            
+                </style>
+
     {% block head %}{% endblock %}
 </head>
 
 <body>
+<div id="wrapper">
+    <div class="overlay"></div>
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+        <ul class="nav sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="#">
+                    Yarnings
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('home') }}"><i class="fa fa-fw fa-home"></i>Home</a>
+            </li>
 
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                <a class="navbar-brand" href="{{ url_for('home')}}">Yarnings</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                    {% else %}
-                    <li><a data-toggle="modal" data-target="#loginNavModal">Login</a></li>
-                    <li><a data-toggle="modal" data-target="#registerNavModal">Register</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
+            {% if current_user.is_authenticated %}
+            <li><a href="#"><i class="fa fa-fw fa-cog"></i> Update Profile</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+            <li><a data-toggle="modal" data-target="#loginNavModal">Login</a></li>
+            <li><a data-toggle="modal" data-target="#registerNavModal">Register</a></li>
+            {% endif %}
+            <li> </li>
+            <li><a href="#"><i class="fa fa-fw fa-video-camera"></i>  Chris' Story</a></li>
+            <li> </li>
+            <li><a href="#"><i class="fa fa-fw fa-file-o"></i>  Statement of Choices</a></li>
+            <li><a href="#"><i class="fa fa-fw fa-file-o"></i>  Acute Resuscitation Plan</a></li>
+            <li><a href="#"><i class="fa fa-fw fa-file-o"></i>  Advanced Health Directive</a></li>
+            <li><a href="#"><i class="fa fa-fw fa-file-o"></i>  Enduring Power of Attorney</a></li>
+            <li> </li>
+            <li><a href="#"><i class="fa fa-fw fa-gavel"></i>  Legal Services</a></li>
+            <li><a href="https://twitter.com/HealthHackAu"><i class="fa fa-fw fa-twitter"></i>HealthHack Twitter</a></li>
+        </ul>
     </nav>
+    <!-- /#sidebar-wrapper -->
+
+    <button type="button" class="hamburger is-closed animated fadeInLeft" data-toggle="offcanvas">
+        <span class="hamb-top"></span>
+        <span class="hamb-middle"></span>
+        <span class="hamb-bottom"></span>
+    </button>
+
     <div class="container">
         {% include "flash.html" %} {% block content %}{% endblock %}
     </div>
@@ -79,7 +511,7 @@
               <h4 class="modal-title">Login</h4>
               <div id ="loginModalError" class="alert alert-danger" style="display: none;"></div> 
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-center no-padding-modal">
                 <form id="loginModalForm" action="login" method="POST" name="form">
                     <input type="hidden" name="ajax" value="True" />
                     <div class="col-md-4 col-md-offset-4">
@@ -138,7 +570,7 @@
               <h4 class="modal-title">Register</h4>
               <div id ="registerModalError" class="alert alert-danger" style="display: none;"></div> 
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-center no-padding-modal">
                 <form id="registerModalForm"action="register" method="POST" name="form">
                     <input type="hidden" name="ajax" value="True" />
                     <div class="col-md-4 col-md-offset-4">
@@ -194,7 +626,74 @@
         </div>
     </div>
     {% endif %}
-    <!-- End modals -->   
+    <!-- End modals --> 
+    <script>
+            var current = 0;
+    
+            $(document).ready(function () {
+                var trigger = $('.hamburger'),
+                    overlay = $('.overlay'),
+                    isClosed = false;
+    
+                trigger.click(function () {
+                    hamburger_cross();
+                });
+    
+                function hamburger_cross() {
+    
+                    if (isClosed == true) {
+                        overlay.hide();
+                        trigger.removeClass('is-open');
+                        trigger.addClass('is-closed');
+                        isClosed = false;
+                    } else {
+                        overlay.show();
+                        trigger.removeClass('is-closed');
+                        trigger.addClass('is-open');
+                        isClosed = true;
+                    }
+                }
+    
+                $('[data-toggle="offcanvas"]').click(function () {
+                    $('#wrapper').toggleClass('toggled');
+                });
+    
+            });
+    
+            var i = 0;
+    
+            function animate() {
+                i += 0.1;
+                $(".animate").each(function (index, element) {
+                    var posx = $(element).data("pos-x");
+                    var posy = $(element).data("pos-y");
+                    var hSpeed = $(element).data("h-speed");
+                    var vSpeed = $(element).data("v-speed");
+                    var hDistance = $(element).data("h-distance");
+                    var vDistance = $(element).data("v-distance");
+    
+                    if (vDistance === 0) {
+                        $(element).css('top', posy);
+                    }
+                    else {
+                        $(element).css('top', posy + Math.sin(i * vSpeed / vDistance) * vDistance);
+                    }
+    
+                    if (hDistance === 0) {
+                        $(element).css('left', posx);
+                    }
+                    else {
+                        $(element).css('left', posx + Math.sin(i * hSpeed / hDistance) * hDistance);
+                    }
+    
+                });
+    
+                setTimeout(animate, 16);
+            }
+    
+            animate();
+        </script>
+</div>
 </body>
 
 </html>

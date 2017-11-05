@@ -1,4 +1,14 @@
-.padded-btn {
-    padding-top: 6px;
-    padding-bottom: 6px;
+
+.btn-yarn {
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+    background-color: #6c5c2d !important;
+}
+
+.btn {
+    background-color: #6c5c2d !important;
+}
+
+.no-padding-modal {
+    padding: 0px !important;
 }
