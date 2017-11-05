@@ -570,7 +570,38 @@
             $('.save-choices').click(function (e) {
                 var choices = {};
 
-                
+                choices.family = {};
+                choices.family.who = $('#family-who').val();
+                choices.family.tradition = $('#family-tradition').val();
+
+                choices.sickness = {};
+                choices.sickness.awareness = $('#sickness-level').val();
+                choices.sickness.who = $('#sickness-who').val();
+
+                var where = [];
+                $.each($("input[name='sickness-where']:checked"), function(){
+                    where.push($(this).val());
+                });
+
+                choices.sickness.where = where;
+                choices.sickness.additional = $('#sickness-additional').val();
+
+                choices.wishes = {};
+                choices.wishes.will = $('input[name=wishes-will]:checked').val()
+                choices.wishes.arp = $('input[name=wishes-filled-arp]:checked').val();
+                choices.wishes.soc = $('input[name=wishes-filled-soc]:checked').val();
+                choices.wishes.ahd = $('input[name=wishes-filled-ahd]:checked').val();
+                choices.wishes.epoa = $('input[name=wishes-filled-epoa]:checked').val();
+                choices.wishes.funeral_plan = $('#wishes-plan').val();
+                choices.wishes.donate_organs = $('input[name=wishes-organs]:checked').val();
+                choices.wishes.myhealth = $('input[name=wishes-myhealth]:checked').val();
+
+                console.log(choices);
+                $.ajax({
+                    type: "POST",
+                    url: "/yarn-update",
+                    data: choices,
+                });
             });
         });
 
