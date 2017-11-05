@@ -1,6 +1,7 @@
 Flask
 Flask-Login
 Flask-WTF
+Flask-Session
 Jinja2
 MarkupSafe
 WTForms

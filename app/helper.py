@@ -4,12 +4,12 @@ from pymongo.errors import DuplicateKeyError
 
 class Helper():
 
-    def __init__(self, username, email, name):
+    def __init__(self, username, email, name, yarner = None, yarn = None):
         self.username = username
         self.email = email
         self.name = name
-        self.activeYarner = None
-        self.activeYarn = None
+        self.activeYarner = yarner
+        self.activeYarn = yarn
         self.admin = False
 
     def is_authenticated(self):
@@ -29,12 +29,14 @@ class Helper():
 
     def set_yarner(self, hibiscus):
         self.activeYarner = hibiscus
+        self.update(self.email, self.name)
 
     def get_yarn(self):
             return self.activeYarn
 
     def set_yarn(self, timestamp):
         self.activeYarn = timestamp
+        self.update(self.email, self.name)
 
     def is_admin(self):
         return self.admin
@@ -52,20 +54,24 @@ class Helper():
         collection = app.config['HELPERS_COLLECTION']
 
         try:
-            collection.insert({"_id": self.username, "password": pass_hash, "email": self.email, "name": self.name})
+            collection.insert({"_id": self.username, "password": pass_hash, "email": self.email, "name": self.name, "yarner": self.activeYarner, "yarn": self.activeYarn})
             return True
         except DuplicateKeyError:
             return False
 
-    def update(self, email, name, password):
+    def update(self, email, name, password = None):
         self.email = email
         self.name = name
-        pass_salt = app.config['SALT'] + password
-        pass_hash = generate_password_hash(pass_salt, method='pbkdf2:sha256')
+        if not password is None:
+            pass_salt = app.config['SALT'] + password
+            pass_hash = generate_password_hash(pass_salt, method='pbkdf2:sha256')
         collection = app.config['HELPERS_COLLECTION']
 
         try:
-            collection.update_one({"_id": self.username}, {'$set': {"password": pass_hash, "email": self.email, "name": self.name}}, upsert=True)
+            if not password is None:
+                collection.update_one({"_id": self.username}, {'$set': {"password": pass_hash, "email": self.email, "name": self.name, "yarner": self.activeYarner, "yarn": self.activeYarn}}, upsert=True)
+            else:
+                collection.update_one({"_id": self.username}, {'$set': {"email": self.email, "name": self.name, "yarner": self.activeYarner, "yarn": self.activeYarn}}, upsert=True)
             return True
         except Exception,e: 
             print str(e)

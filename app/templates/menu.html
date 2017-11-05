@@ -80,31 +80,7 @@
                             <button class="btn btn-default" type="submit">Submit</button>
                         </div>
                     </form>
-                    <script>
-                        $("#newYarnerModalForm").submit(function(e) {
-    
-                        $.ajax({
-                            type: "POST",
-                            url: 'new-yarner',
-                            data: $("#newYarnerModalForm").serialize(), 
-                            success: function()
-                            {
-                                //issue with proper on-forwarding of route here
-                                location.reload();
-                            },
-                            error: function(xhr, status, errorv){
-                                var err = eval("(" + xhr.responseText + ")");
-                                var el = document.getElementById("newYarnerModalError");
-                                console.log(el);
-                                el.style.visibility="visible";
-                                el.style.display = 'block';
-                                el.innerHTML = err.message;
-                            }
-                            });
-    
-                        e.preventDefault();
-                    });
-                    </script>
+                    
                 </div>
                 <div class="modal-footer">
                 </div>

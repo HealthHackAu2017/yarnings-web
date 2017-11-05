@@ -1,6 +1,8 @@
+from app import app
 from flask_wtf import FlaskForm as Form
 from wtforms import StringField, BooleanField
 from wtforms.validators import Optional, DataRequired
+from pymongo.errors import DuplicateKeyError
 
 class Yarn():
     
@@ -32,7 +34,7 @@ class Yarn():
     }
 
     def __init__(self, name, yarner, timestamp, helper, yarn = defaultYarn):
-        self._id = name + "_" + timestamp
+        self._id = str(yarner) + "_" + str(timestamp)
         self.name = name
         self.yarner = yarner
         self.helper = helper
@@ -61,7 +63,7 @@ class Yarn():
         collection = app.config['YARNS_COLLECTION']
 
         try:
-            collection.insert(self)
+            collection.insert({"_id": self._id, "name": self.name, "yarner": self.yarner, "helper": self.helper, "timestamp": self.timestamp, "yarn": self.yarn})
             return True
         except DuplicateKeyError:
             return False
@@ -77,6 +79,18 @@ class Yarn():
         except Exception,e: 
             print str(e)
             return False
+    """ Static Methods """
+    @staticmethod
+    def get(yarner, timestamp):
+        collection = app.config['YARNS_COLLECTION']
+
+        try:
+            ret = collection.find_one({"_id": str(yarner) + "_" + str(timestamp)})
+            print(ret)
+            return ret
+        except Exception,e: 
+            print str(e)
+            return None
     
 class YarnForm(Form):
     """Yarn form to hold and share a yarning"""
